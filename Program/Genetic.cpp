@@ -8,7 +8,7 @@ void Genetic::run()
 	int nbIter;
 	int nbIterNonProd = 1;
 	if (params.verbose) std::cout << "----- STARTING GENETIC ALGORITHM" << std::endl;
-	for (nbIter = 0 ; nbIterNonProd <= params.ap.nbIter && (params.ap.timeLimit == 0 || (double)(clock()-params.startTime)/(double)CLOCKS_PER_SEC < params.ap.timeLimit) ; nbIter++)
+	for (nbIter = 0 ; nbIterNonProd <= params.ap.nbIter && (params.ap.timeLimit == 0 || (double)(clock()-params.startTime)/(double)CLOCKS_PER_SEC < params.ap.timeLimit) && (params.ap.nbIterTotal == -1 || params.ap.nbIterTotal > nbIter); nbIter++)
 	{	
 		/* SELECTION AND CROSSOVER */
 		crossoverOX(offspring, population.getBinaryTournament(),population.getBinaryTournament());
