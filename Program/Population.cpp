@@ -8,16 +8,16 @@ void Population::generatePopulation()
 		Individual randomIndiv(params);
 		split.generalSplit(randomIndiv, params.nbVehicles);
 		localSearch.run(randomIndiv, params.penaltyCapacity, params.penaltyDuration);
-		addIndividual(randomIndiv, true);
+		addIndividual(randomIndiv, true, -1);
 		if (!randomIndiv.eval.isFeasible && params.ran() % 2 == 0)  // Repair half of the solutions in case of infeasibility
 		{
 			localSearch.run(randomIndiv, params.penaltyCapacity*10., params.penaltyDuration*10.);
-			if (randomIndiv.eval.isFeasible) addIndividual(randomIndiv, false);
+			if (randomIndiv.eval.isFeasible) addIndividual(randomIndiv, false, -1);
 		}
 	}
 }
 
-bool Population::addIndividual(const Individual & indiv, bool updateFeasible)
+bool Population::addIndividual(const Individual & indiv, bool updateFeasible, const int nbIter)
 {
 	if (updateFeasible)
 	{
@@ -56,7 +56,7 @@ bool Population::addIndividual(const Individual & indiv, bool updateFeasible)
 		if (indiv.eval.penalizedCost < bestSolutionOverall.eval.penalizedCost - MY_EPSILON)
 		{
 			bestSolutionOverall = indiv;
-			searchProgress.push_back({ clock() - params.startTime , bestSolutionOverall.eval.penalizedCost });
+			searchProgress.push_back({ clock() - params.startTime, bestSolutionOverall.eval.penalizedCost, nbIter });
 		}
 		return true;
 	}
@@ -271,8 +271,8 @@ double Population::getAverageCost(const SubPopulation & pop)
 void Population::exportSearchProgress(std::string fileName, std::string instanceName)
 {
 	std::ofstream myfile(fileName);
-	for (std::pair<clock_t, double> state : searchProgress)
-		myfile << instanceName << ";" << params.ap.seed << ";" << state.second << ";" << (double)state.first / (double)CLOCKS_PER_SEC << std::endl;
+	for (std::tuple<clock_t, double, int> state : searchProgress)
+		myfile << instanceName << ";" << params.ap.seed << ";" << std::get<1>(state) << ";" << (double)std::get<0>(state) / (double)CLOCKS_PER_SEC << ";" << std::get<2>(state) << std::endl;
 }
 
 void Population::exportCVRPLibFormat(const Individual & indiv, std::string fileName)

@@ -15,11 +15,11 @@ void Genetic::run()
 
 		/* LOCAL SEARCH */
 		localSearch.run(offspring, params.penaltyCapacity, params.penaltyDuration);
-		bool isNewBest = population.addIndividual(offspring,true);
+		bool isNewBest = population.addIndividual(offspring,true, nbIter);
 		if (!offspring.eval.isFeasible && params.ran()%2 == 0) // Repair half of the solutions in case of infeasibility
 		{
 			localSearch.run(offspring, params.penaltyCapacity*10., params.penaltyDuration*10.);
-			if (offspring.eval.isFeasible) isNewBest = (population.addIndividual(offspring,false) || isNewBest);
+			if (offspring.eval.isFeasible) isNewBest = (population.addIndividual(offspring,false, nbIter) || isNewBest);
 		}
 
 		/* TRACKING THE NUMBER OF ITERATIONS SINCE LAST SOLUTION IMPROVEMENT */
