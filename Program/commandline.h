@@ -57,6 +57,8 @@ public:
 					ap.timeLimit = atof(argv[i+1]);
 				else if (std::string(argv[i]) == "-it")
 					ap.nbIter  = atoi(argv[i+1]);
+				else if (std::string(argv[i]) == "-ittot")
+					ap.nbIterTotal = atoi(argv[i + 1]);
 				else if (std::string(argv[i]) == "-seed")
 					ap.seed    = atoi(argv[i+1]);
 				else if (std::string(argv[i]) == "-veh")
