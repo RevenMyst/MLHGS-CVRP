@@ -86,6 +86,7 @@ class Population
 
    // Returns the average broken pairs distance of this individual with the nbClosest individuals in the population
    double averageBrokenPairsDistanceClosest(const Individual & indiv, int nbClosest);
+   double averageBrokenPairsDistanceAll(const Individual & indiv);
 
    // Returns the average diversity value among the 50% best individuals in the subpopulation
    double getDiversity(const SubPopulation & pop);

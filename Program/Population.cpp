@@ -250,6 +250,15 @@ double Population::averageBrokenPairsDistanceClosest(const Individual & indiv, i
 	return result / (double)maxSize;
 }
 
+double Population::averageBrokenPairsDistanceAll(const Individual & indiv)
+{
+	double result = 0.;
+	SubPopulation pop = (indiv.eval.isFeasible) ? feasibleSubpop : infeasibleSubpop;
+	for (Individual * indiv2 : pop)
+		result += brokenPairsDistance(indiv, *indiv2);
+	return result / (double)pop.size();
+}
+
 double Population::getDiversity(const SubPopulation & pop)
 {
 	double average = 0.;

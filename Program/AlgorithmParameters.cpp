@@ -23,7 +23,7 @@ struct AlgorithmParameters default_algorithm_parameters() {
 	ap.seed = 0;
 	ap.nbIter = 20000;
 	ap.nbIterTotal = -1;
-	ap.nbIterTraces = 500;
+	ap.nbIterTraces = 10;
 	ap.timeLimit = 0;
 	ap.useSwapStar = 1;
 

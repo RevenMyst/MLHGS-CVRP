@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 
 		// Running HGS
 		Genetic solver(params);
-		solver.run();
+		solver.run2();
 		
 		// Exporting the best solution
 		if (solver.population.getBestFound() != NULL)
