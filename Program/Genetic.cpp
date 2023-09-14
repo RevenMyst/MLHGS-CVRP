@@ -52,21 +52,33 @@ void Genetic::run2()
 	{	
 		/* SELECTION AND CROSSOVER */
 		std::vector<Individual*> offsprings = exhaustiveCrossoverOX(population.getBinaryTournament(),population.getBinaryTournament());
-		Individual* mostDiverse = nullptr;
-		double maxDiversity = -1.;
-		for(Individual* ind : offsprings)
+		double max_score = -1;
+		std::vector<double> diversities = std::vector<double>(offsprings.size(),0.0);
+		std::vector<double> costs = std::vector<double>(offsprings.size(),0.0);
+		double min_cost = DBL_MAX;
+		double max_cost = -1;
+		for(int i = 0; i < offsprings.size(); i++)
 		{
-			offspring = *ind;
-			/* LOCAL SEARCH */
+			offspring = *offsprings[i];
 			localSearch.run(offspring, params.penaltyCapacity, params.penaltyDuration);
-			double diversity = population.averageBrokenPairsDistanceAll(offspring);
-			if(diversity > maxDiversity)
+			diversities[i] = population.averageBrokenPairsDistanceAll(*offsprings[i]);
+			costs[i] = offspring.eval.penalizedCost;
+			if(min_cost < offspring.eval.penalizedCost) min_cost = offspring.eval.penalizedCost;
+			if(max_cost > offspring.eval.penalizedCost) max_cost = offspring.eval.penalizedCost;
+		}
+		for(int i = 0; i < offsprings.size(); i++)
+		{
+			// set cost between 0 and 1 (1 is the best)
+			costs[i] = (costs[i] - min_cost) / (max_cost - min_cost);
+			if(costs[i]*diversities[i] > max_score)
 			{
-				maxDiversity = diversity;
-				mostDiverse = ind;
+				max_score = costs[i]*diversities[i];
+				offspring = *offsprings[i];
 			}
 		}
-		offspring = *mostDiverse;
+
+
+		//offspring = nullptr;
 
 		bool isNewBest = population.addIndividual(offspring,true, nbIter);
 		if (!offspring.eval.isFeasible && params.ran()%2 == 0) // Repair half of the solutions in case of infeasibility
