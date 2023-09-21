@@ -154,6 +154,8 @@ void Genetic::run3()
 		//std::cout << offspring.eval.penalizedCost << " " << min_cost << " " << best_score << std::endl;
 
 
+		best_cuts.push_back({parent1.chromT, parent2.chromT, offspring.cut1, offspring.cut2});
+
 		bool isNewBest = population.addIndividual(offspring,true, nbIter);
 		if (!offspring.eval.isFeasible && params.ran()%2 == 0) // Repair half of the solutions in case of infeasibility
 		{
@@ -245,7 +247,13 @@ void Genetic::specificCrossoverOX(Individual& result, const Individual & parent1
 	}
 
 	// Complete the individual with the Split algorithm
+<<<<<<< HEAD
 	split.generalSplit(result, parent1.eval.nbRoutes);
+=======
+	split.generalSplit(*result, parent1.eval.nbRoutes);
+	result->cut1 = start;
+	result->cut2 = end;
+>>>>>>> bc09749d17410f94438bebf58afe163a9754ff59
 }
 
 std::vector<Individual> Genetic::exhaustiveCrossoverOX(const Individual & parent1, const Individual & parent2)

@@ -35,7 +35,7 @@ public:
 	LocalSearch localSearch;		// Local Search structure
 	Population population;			// Population (public for now to give access to the solutions, but should be be improved later on)
 	Individual offspring;			// First individual to be used as input for the crossover
-
+	std::vector<std::tuple<std::vector<int>, std::vector<int>, int, int>> best_cuts;
 	// OX Crossover
 	void crossoverOX(Individual & result, const Individual & parent1, const Individual & parent2);
 	void specificCrossoverOX(Individual& result, const Individual & parent1, const Individual & parent2, int start, int end);
