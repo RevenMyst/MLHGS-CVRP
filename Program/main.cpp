@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 
 		// Running HGS
 		Genetic solver(params);
-		solver.run2();
+		solver.run3();
 		
 		// Exporting the best solution
 		if (solver.population.getBestFound() != NULL)
@@ -32,6 +32,7 @@ int main(int argc, char *argv[])
 			if (params.verbose) std::cout << "----- WRITING BEST SOLUTION IN : " << commandline.pathSolution << std::endl;
 			solver.population.exportCVRPLibFormat(*solver.population.getBestFound(),commandline.pathSolution+".sol");
 			solver.population.exportSearchProgress(commandline.pathSolution + std::to_string(params.ap.seed) + "PG.csv", commandline.pathInstance);
+			solver.population.exportFullSearchProgress(commandline.pathSolution + std::to_string(params.ap.seed) + "FPG.csv", commandline.pathInstance);
 		}
 	}
 	catch (const string& e) { std::cout << "EXCEPTION | " << e << std::endl; }

@@ -38,13 +38,13 @@ public:
 
 	// OX Crossover
 	void crossoverOX(Individual & result, const Individual & parent1, const Individual & parent2);
-	void specificCrossoverOX(Individual* result, const Individual & parent1, const Individual & parent2, int start, int end);
-	std::vector<Individual*> exhaustiveCrossoverOX(const Individual & parent1, const Individual & parent2);
+	void specificCrossoverOX(Individual& result, const Individual & parent1, const Individual & parent2, int start, int end);
+	std::vector<Individual> exhaustiveCrossoverOX(const Individual & parent1, const Individual & parent2);
 
     // Running the genetic algorithm until maxIterNonProd consecutive iterations or a time limit
     void run() ;
 	void run2();
-
+	void run3();
 	// Constructor
 	Genetic(Params & params);
 };

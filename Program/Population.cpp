@@ -173,6 +173,8 @@ void Population::managePenalties()
 	}
 }
 
+
+
 const Individual & Population::getBinaryTournament ()
 {
 	// Picking two individuals with uniform distribution over the union of the feasible and infeasible subpopulations
@@ -187,6 +189,32 @@ const Individual & Population::getBinaryTournament ()
 	updateBiasedFitnesses(infeasibleSubpop);
 	if (indiv1->biasedFitness < indiv2->biasedFitness) return *indiv1 ;
 	else return *indiv2 ;		
+}
+bool compareByPenalizedCost(const Individual* obj1, const Individual* obj2) {
+    return obj1->eval.penalizedCost > obj2->eval.penalizedCost;
+}
+const Individual & Population::getRanked()
+{
+	SubPopulation subpop = std::vector <Individual*>();
+	for(auto i : feasibleSubpop){
+		subpop.push_back(i);
+	}
+	for(auto i : infeasibleSubpop){
+		subpop.push_back(i);
+	}
+	std::sort(subpop.begin(), subpop.end(), compareByPenalizedCost);
+	std::uniform_int_distribution<> distr(0, subpop.size() * (subpop.size() + 1) / 2);
+	int rank = distr(params.ran);
+	int sum = 1;
+	int i = 0;
+	while(sum<=rank){
+		sum += ++i;
+	}
+	//if(i>=subpop.size()){
+		//std::cout << i << " " << rank << " " << sum << " " << subpop.size() << std::endl;
+	//}
+	i = std::min<int>(i,(int)subpop.size()-1);
+	return *subpop[i];		
 }
 
 const Individual * Population::getBestFeasible ()
@@ -282,6 +310,12 @@ void Population::exportSearchProgress(std::string fileName, std::string instance
 	std::ofstream myfile(fileName);
 	for (std::tuple<clock_t, double, int> state : searchProgress)
 		myfile << instanceName << ";" << params.ap.seed << ";" << std::get<1>(state) << ";" << (double)std::get<0>(state) / (double)CLOCKS_PER_SEC << ";" << std::get<2>(state) << std::endl;
+}
+void Population::exportFullSearchProgress(std::string fileName, std::string instanceName)
+{
+	std::ofstream myfile(fileName);
+	for (std::tuple<clock_t, double, int, double, double> state : fullSearchProgress)
+		myfile << instanceName << ";" << params.ap.seed << ";" << std::get<1>(state) << ";" << (double)std::get<0>(state) / (double)CLOCKS_PER_SEC << ";" << std::get<2>(state) << ";" << std::get<3>(state) << ";" << std::get<4>(state) << std::endl;
 }
 
 void Population::exportCVRPLibFormat(const Individual & indiv, std::string fileName)
