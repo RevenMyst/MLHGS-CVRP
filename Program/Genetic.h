@@ -42,9 +42,11 @@ public:
 	std::vector<Individual> exhaustiveCrossoverOX(const Individual & parent1, const Individual & parent2);
 
     // Running the genetic algorithm until maxIterNonProd consecutive iterations or a time limit
-    void run() ;
+    void run();
 	void run2();
 	void run3();
+	void run4();
+	void exportBestCuts(std::string fileName, std::string instanceName);
 	// Constructor
 	Genetic(Params & params);
 };

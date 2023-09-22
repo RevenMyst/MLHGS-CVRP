@@ -313,7 +313,8 @@ void Population::exportSearchProgress(std::string fileName, std::string instance
 }
 void Population::exportFullSearchProgress(std::string fileName, std::string instanceName)
 {
-	std::ofstream myfile(fileName);
+	std::ofstream myfile;
+	myfile.open(fileName, std::ios_base::app);
 	for (std::tuple<clock_t, double, int, double, double> state : fullSearchProgress)
 		myfile << instanceName << ";" << params.ap.seed << ";" << std::get<1>(state) << ";" << (double)std::get<0>(state) / (double)CLOCKS_PER_SEC << ";" << std::get<2>(state) << ";" << std::get<3>(state) << ";" << std::get<4>(state) << std::endl;
 }
